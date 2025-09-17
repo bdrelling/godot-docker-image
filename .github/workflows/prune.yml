@@ -6,12 +6,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  cleanup:
+  prune:
     runs-on: ubuntu-latest
     permissions:
       packages: write
     steps:
-      - name: Cleanup Container Images
+      - name: Prune Container Images
         uses: dataaxiom/ghcr-cleanup-action@v1.0.16
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
