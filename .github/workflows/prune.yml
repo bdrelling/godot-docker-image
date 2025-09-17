@@ -1,0 +1,21 @@
+name: Prune Container Images
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Cleanup Container Images
+        uses: dataaxiom/ghcr-cleanup-action@v1.0.16
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          owner: ${{ github.repository_owner }}
+          package: godot
+          delete-untagged: true
+          exclude-tags: 'latest'

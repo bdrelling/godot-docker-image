@@ -1,0 +1,44 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Dockerfile'
+      - 'scripts/**'
+      - '.github/workflows/build_and_push.yml'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Godot Version'
+        required: false
+        default: '4.5-rc2'
+        type: string
+
+env:
+  GODOT_VERSION: ${{ inputs.version || '4.5-rc2' }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Build and Push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_USERNAME: ${{ github.actor }}
+      run: make deploy
+
+    - name: Deployment Information
+      run: make info
