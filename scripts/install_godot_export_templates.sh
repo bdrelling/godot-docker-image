@@ -4,8 +4,8 @@
 
 set -e
 
-GODOT_VERSION=${1:-"4.5-rc2"}
-# Convert version format from 4.5-rc2 to 4.5.rc2 for Godot's expected path
+GODOT_VERSION=${1:-"4.5-stable"}
+# Convert version format from 4.5-stable to 4.5.stable for Godot's expected path
 GODOT_TEMPLATE_VERSION=$(echo "$GODOT_VERSION" | sed 's/-/./g')
 TEMPLATES_DIR="/root/.local/share/godot/export_templates/${GODOT_TEMPLATE_VERSION}"
 

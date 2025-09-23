@@ -2,7 +2,7 @@
 # ENVIRONMENT VARIABLES
 # ================================
 
-GODOT_VERSION ?= 4.5-rc2
+GODOT_VERSION ?= 4.5-stable
 
 DOCKER_REGISTRY := ghcr.io
 DOCKER_IMAGE_NAME := bdrelling/godot

@@ -13,11 +13,11 @@ on:
       version:
         description: 'Godot Version'
         required: false
-        default: '4.5-rc2'
+        default: '4.5-stable'
         type: string
 
 env:
-  GODOT_VERSION: ${{ inputs.version || '4.5-rc2' }}
+  GODOT_VERSION: ${{ inputs.version || '4.5-stable' }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

@@ -2,7 +2,7 @@ FROM ubuntu:24.04
 
 RUN apt-get update && apt-get install -y wget unzip && rm -rf /var/lib/apt/lists/*
 
-ARG GODOT_VERSION=4.5-rc2
+ARG GODOT_VERSION=4.5-stable
 
 COPY scripts/install_godot.sh ./install_godot.sh
 COPY scripts/install_godot_export_templates.sh ./install_godot_export_templates.sh
