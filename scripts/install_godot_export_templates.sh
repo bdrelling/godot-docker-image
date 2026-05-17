@@ -7,7 +7,9 @@ set -e
 GODOT_VERSION=${1:-"4.6-stable"}
 # Convert version format from 4.6-stable to 4.6.stable for Godot's expected path
 GODOT_TEMPLATE_VERSION=$(echo "$GODOT_VERSION" | sed 's/-/./g')
-TEMPLATES_DIR="/root/.local/share/godot/export_templates/${GODOT_TEMPLATE_VERSION}"
+# Install to a shared system location so any user can find templates via a
+# symlink from their ~/.local/share/godot/export_templates (see Dockerfile).
+TEMPLATES_DIR="/usr/local/share/godot/export_templates/${GODOT_TEMPLATE_VERSION}"
 
 # Check if templates are already installed
 if [ -d "$TEMPLATES_DIR" ] && [ "$(ls -A "$TEMPLATES_DIR" 2>/dev/null)" ] && [ "${FORCE_INSTALL:-false}" != "true" ]; then
