@@ -4,7 +4,7 @@
 
 set -e
 
-GODOT_VERSION=${1:-"4.6-stable"}
+GODOT_VERSION=${1:-"4.7-stable"}
 
 echo "Installing Godot $GODOT_VERSION..."
 
