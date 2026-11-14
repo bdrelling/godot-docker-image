@@ -18,4 +18,6 @@ jobs:
           owner: ${{ github.repository_owner }}
           package: godot
           delete-untagged: true
-          exclude-tags: 'latest'
+          # Preserve stable manifests and their architecture/attestation children.
+          exclude-tags: 'latest,*-stable'
+          older-than: '7 days'

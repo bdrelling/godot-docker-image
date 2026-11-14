@@ -1,0 +1,49 @@
+name: Check stable Godot releases
+
+on:
+  schedule:
+    - cron: '17 7 * * 1' # Mondays at 07:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: godot-release-check
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Test release selection
+        run: python3 -m unittest discover -s tests -v
+      - name: Find missing stable releases
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/godot_versions.py update
+      - name: Create or update the release PR
+        id: pull-request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          branch: automation/godot-stable
+          base: main
+          add-paths: godot-versions.json
+          commit-message: 'Update supported stable Godot versions'
+          title: 'Update stable Godot images'
+          body-path: .builds/godot-update.md
+      # Bot PR workflows may need approval instead of running automatically.
+      # Explicit workflow_dispatch is supported and needs no extra secret.
+      - name: Dispatch build validation for the bot branch
+        if: >-
+          steps.pull-request.outputs.pull-request-operation == 'created' ||
+          steps.pull-request.outputs.pull-request-operation == 'updated'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: gh workflow run deploy.yml --ref automation/godot-stable

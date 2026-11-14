@@ -4,8 +4,8 @@
 
 set -e
 
-GODOT_VERSION=${1:-"4.7-stable"}
-# Convert version format from 4.7-stable to 4.7.stable for Godot's expected path
+GODOT_VERSION=${1:?Pass a Godot release tag, such as 4.7.2-stable}
+# Convert the upstream release tag to Godot's expected template directory.
 GODOT_TEMPLATE_VERSION=$(echo "$GODOT_VERSION" | sed 's/-/./g')
 # Install to a shared system location so any user can find templates via a
 # symlink from their ~/.local/share/godot/export_templates (see Dockerfile).

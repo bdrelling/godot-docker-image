@@ -2,7 +2,8 @@ FROM ubuntu:24.04
 
 RUN apt-get update && apt-get install -y wget unzip && rm -rf /var/lib/apt/lists/*
 
-ARG GODOT_VERSION=4.7-stable
+# Supplied by make / CI from godot-versions.json.
+ARG GODOT_VERSION
 
 COPY scripts/install_godot.sh ./install_godot.sh
 COPY scripts/install_godot_export_templates.sh ./install_godot_export_templates.sh

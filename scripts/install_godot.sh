@@ -4,7 +4,7 @@
 
 set -e
 
-GODOT_VERSION=${1:-"4.7-stable"}
+GODOT_VERSION=${1:?Pass a Godot release tag, such as 4.7.2-stable}
 
 echo "Installing Godot $GODOT_VERSION..."
 
