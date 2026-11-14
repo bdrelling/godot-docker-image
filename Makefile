@@ -2,7 +2,7 @@
 # ENVIRONMENT VARIABLES
 # ================================
 
-GODOT_VERSION ?= 4.7-stable
+GODOT_VERSION ?= $(shell python3 scripts/godot_versions.py latest)
 
 DOCKER_REGISTRY := ghcr.io
 DOCKER_IMAGE_NAME := bdrelling/godot
@@ -46,13 +46,13 @@ build: ## Build Godot image for current platform
 	@echo "Building Godot $(GODOT_VERSION) image for current platform..."
 	docker build --build-arg GODOT_VERSION=$(GODOT_VERSION) -t $(DOCKER_IMAGE_FULL) .
 
-deploy: clean auth-registry ## Build and push multi-arch to registry
-	@echo "Building and pushing multi-arch $(DOCKER_IMAGE_FULL) and latest..."
-	docker buildx create --use --name godot-builder
+deploy: auth-registry ## Build and push an exact multi-arch version tag
+	@echo "Building and pushing multi-arch $(DOCKER_IMAGE_FULL)..."
+	@docker buildx inspect godot-builder >/dev/null 2>&1 || docker buildx create --name godot-builder
+	docker buildx use godot-builder
 	docker buildx build --platform linux/amd64,linux/arm64 \
 		--build-arg GODOT_VERSION=$(GODOT_VERSION) \
 		-t $(DOCKER_IMAGE_FULL) \
-		-t $(DOCKER_REGISTRY)/$(DOCKER_IMAGE_NAME):latest \
 		--push .
 
 pull: auth-registry ## Pull Godot image from registry
